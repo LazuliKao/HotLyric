@@ -46,11 +46,17 @@
 		<None Remove="Extensions\**\HotLyric.Extensions.lib" />
 		<None Remove="Extensions\**\HotLyric.Extensions.pdb" />
 	</ItemGroup>
+ 
+	<ItemGroup>
+	  <Content Update="NotifyIcon-Dark.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content> 
+		<Content Update="NotifyIcon.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="appicon.ico">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
 		<None Update="Assets\defaultTheme.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

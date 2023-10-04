@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotLyric.Win32.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,9 +18,15 @@ namespace HotLyric.Win32.Base.BackgroundHelpers
         public static async Task<IRandomAccessStream> GetStreamAsync(Uri uri, CancellationToken cancellationToken)
         {
             switch (uri.Scheme.ToLowerInvariant())
-            {
+            { 
                 case "file":
                     {
+                        var fp = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory,
+                            uri.LocalPath.TrimStart('\\')));
+                        if (File.Exists(fp))
+                        {
+                            return File.OpenRead(fp).AsRandomAccessStream();
+                        }
                         var fileStream = File.OpenRead(uri.LocalPath);
                         return fileStream.AsRandomAccessStream();
                     }

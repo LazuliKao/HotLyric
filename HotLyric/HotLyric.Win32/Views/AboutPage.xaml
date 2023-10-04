@@ -30,10 +30,17 @@
                     <ContentControl Style="{StaticResource IconTitleStyle}" Tag="&#xE99A;">
                         <StackPanel Orientation="Vertical" Margin="0,12">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <Button Content="HotLyric" Background="Transparent" BorderThickness="0" Padding="4" Command="{Binding OpenStorePageCmd}" />
+                                <TextBlock TextWrapping="Wrap" Text="{Binding AppVersion,Mode=OneWay}" Margin="4,0,0,0" VerticalAlignment="Center" />
+                                <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">
+                                    <Run Text="By. cnbluefire" />
+                                </TextBlock>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                                 <Button Content="{Binding AppName,Mode=OneWay}" Background="Transparent" BorderThickness="0" Padding="4" Command="{Binding OpenStorePageCmd}" />
                                 <TextBlock TextWrapping="Wrap" Text="{Binding AppVersion,Mode=OneWay}" Margin="4,0,0,0" VerticalAlignment="Center" />
                                 <TextBlock VerticalAlignment="Center" Margin="8,0,0,0">
-                                    <Run Text="By." />
+                                    <Run Text="Repack." />
                                     <Run Text="{Binding Author,Mode=OneWay}"/>
                                 </TextBlock>
                             </StackPanel>
@@ -42,7 +49,8 @@
                                 <Button Content="检查更新" Background="#33666666" Padding="8,4" Command="{Binding CheckUpdateCmd}" />
                                 <Button Content="日志文件夹" Background="#33666666" Padding="8,4" Command="{Binding OpenLogFolderCmd}"/>
                                 <Button Content="反馈问题" Background="#33666666" Padding="8,4" Command="{Binding FeedbackCmd}"/>
-                                <Button Content="GitHub" Background="#33666666" Padding="8,4" Command="{Binding GithubCmd}"/>
+                                <Button Content="GitHub(原作者)" Background="#33666666" Padding="8,4" Command="{Binding GithubCmd}"/>
+                                <Button Content="GitHub(分支)" Background="#33666666" Padding="8,4" Command="{Binding GithubCmdLK}"/>
                             </control:WrapPanel>
                         </StackPanel>
                     </ContentControl>

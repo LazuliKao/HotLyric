@@ -4,7 +4,6 @@ using HotLyric.Win32.Views;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,10 +38,8 @@ namespace HotLyric.Win32.Controls
 
         public NotifyIconHelper()
         {
-            notifyIcon = new TaskbarIcon()
-            {
-                Icon = new Icon("appicon.ico")
-            };
+            notifyIcon = new TaskbarIcon();
+
             var contextMenu = new MenuFlyout();
             var command = new AsyncRelayCommand<MenuFlyoutItemBase>(OnMenuItemClick);
             var toggleCommand = new AsyncRelayCommand<ToggleMenuFlyoutItem>(async item =>
@@ -290,8 +287,8 @@ namespace HotLyric.Win32.Controls
 
         private static Uri GetCurrentThemeIconUri()
         {
-            const string lightIconUri = "ms-appx:///Images/NotifyIcon.png";
-            const string darkIconUri = "ms-appx:///Images/NotifyIcon-Dark.png";
+            const string lightIconUri = "file://NotifyIcon.png";
+            const string darkIconUri = "file://NotifyIcon-Dark.png";
 
             bool useDarkIcon = false; // 即任务栏为白色
             try

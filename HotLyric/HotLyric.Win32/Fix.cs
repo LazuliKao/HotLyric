@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace HotLyric.Win32;
@@ -17,7 +18,7 @@ internal static class Fix
         return dir;
     });
     public static string Cache => CacheLazy.Value;
-    
+
     public static LocalSettingsImpl LocalSettings { get; } = new LocalSettingsImpl();
     public class LocalSettingsImpl
     {
@@ -62,4 +63,11 @@ internal static class Fix
         }
     }
 
+    public class Package
+    {
+        public static Package Current = new();
+        public string PublisherDisplayName { get; set; } = "LazuliKao";
+        public string DisplayName { get; set; } = "HotLyric.Portable";
+        public Version Version { get; set; } = typeof(Package).Assembly.GetName().Version ?? new(0, 0, 0);
+    }
 }

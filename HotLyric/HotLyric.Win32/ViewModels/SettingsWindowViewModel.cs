@@ -518,15 +518,15 @@ namespace HotLyric.Win32.ViewModels
             OnPropertyChanged(nameof(ShowLauncherWindowOnStartupEnabled));
         }
 
-        public string AppName => Package.Current.DisplayName;
+        public string AppName => Fix.Package.Current.DisplayName;
 
-        public string Author => Package.Current.PublisherDisplayName;
+        public string Author => Fix.Package.Current.PublisherDisplayName;
 
         public string AppVersion
         {
             get
             {
-                var v = Package.Current.Id.Version;
+                var v = Fix.Package.Current.Version;
                 return new Version(v.Major, v.Minor, v.Build, v.Revision).ToString();
             }
         }
@@ -647,7 +647,6 @@ namespace HotLyric.Win32.ViewModels
                 var folder = await StorageFolder.GetFolderFromPathAsync(
                     System.IO.Path.Combine(
                        Environment.CurrentDirectory,
-                        "Local",
                         "Logs"));
 
                 await Launcher.LaunchFolderAsync(folder);
@@ -707,6 +706,11 @@ namespace HotLyric.Win32.ViewModels
             var uri = new Uri("https://github.com/cnbluefire/HotLyric");
             await Launcher.LaunchUriAsync(uri);
         }));
+        public AsyncRelayCommand GithubCmdLK => githubCmd ?? (githubCmd = new AsyncRelayCommand(async () =>
+             {
+                 var uri = new Uri("https://github.com/LazuliKao/HotLyric");
+                 await Launcher.LaunchUriAsync(uri);
+             }));
 
         public AsyncRelayCommand FontSizeCmd => fontSizeCmd ?? (fontSizeCmd = new AsyncRelayCommand(async () =>
         {
