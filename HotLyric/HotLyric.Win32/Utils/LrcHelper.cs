@@ -159,7 +159,7 @@ namespace HotLyric.Win32.Utils
 
         public static async Task ClearCacheAsync()
         {
-            var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists);
+            var folder = await StorageFolder.GetFolderFromPathAsync(Fix.Cache);
             if (folder != null)
             {
                 foreach (var item in await folder.GetItemsAsync())

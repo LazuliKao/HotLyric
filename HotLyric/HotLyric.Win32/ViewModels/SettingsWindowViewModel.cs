@@ -646,7 +646,7 @@ namespace HotLyric.Win32.ViewModels
             {
                 var folder = await StorageFolder.GetFolderFromPathAsync(
                     System.IO.Path.Combine(
-                        ApplicationData.Current.LocalCacheFolder.Path,
+                       Environment.CurrentDirectory,
                         "Local",
                         "Logs"));
 
@@ -898,7 +898,7 @@ namespace HotLyric.Win32.ViewModels
 
             try
             {
-                if (ApplicationData.Current.LocalSettings.Values.TryGetValue(settingsKey, out var _json)
+                if (Fix.LocalSettings.TryGetValue(settingsKey, out var _json)
                     && _json is string json)
                 {
                     return JsonConvert.DeserializeObject<T>(json);
@@ -931,12 +931,12 @@ namespace HotLyric.Win32.ViewModels
                 {
                     if (value is null)
                     {
-                        ApplicationData.Current.LocalSettings.Values.Remove(settingsKey);
+                        Fix.LocalSettings.Remove(settingsKey);
                     }
                     else
                     {
                         var json = JsonConvert.SerializeObject(value);
-                        ApplicationData.Current.LocalSettings.Values[settingsKey] = json;
+                        Fix.LocalSettings[settingsKey] = json;
                     }
                 }
                 catch (Exception ex)

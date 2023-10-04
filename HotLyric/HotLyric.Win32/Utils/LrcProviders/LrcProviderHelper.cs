@@ -80,7 +80,7 @@ namespace HotLyric.Win32.Utils.LrcProviders
 
             try
             {
-                var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists).AsTask(cancellationToken);
+                var folder = await StorageFolder.GetFolderFromPathAsync(Fix.Cache);
                 if (folder != null)
                 {
                     if ((await folder.TryGetItemAsync(md5).AsTask(cancellationToken)) is StorageFile file)
@@ -121,7 +121,7 @@ namespace HotLyric.Win32.Utils.LrcProviders
 
             try
             {
-                var folder = await ApplicationData.Current.TemporaryFolder.CreateFolderAsync("cache", CreationCollisionOption.OpenIfExists).AsTask(cancellationToken);
+                var folder = await StorageFolder.GetFolderFromPathAsync(Fix.Cache);
                 if (folder != null && (await folder.TryGetItemAsync(md5).AsTask(cancellationToken)) is StorageFile file)
                 {
                     var text = await FileIO.ReadTextAsync(file).AsTask(cancellationToken);

@@ -60,23 +60,30 @@ namespace HotLyric.Win32.Models
         {
             get
             {
-                if (ApplicationData.Current.LocalSettings.Values.TryGetValue("Theme_Current", out var _json)
-                    && _json is string json
-                    && !string.IsNullOrEmpty(json))
+                try
                 {
-                    try
-                    {
-                        var model = JsonConvert.DeserializeObject<LyricThemeJsonModel>(json);
 
-                        if (model != null)
+                    if (Fix.LocalSettings.TryGetValue("Theme_Current", out var _json)
+                        && _json is string json
+                        && !string.IsNullOrEmpty(json))
+                    {
+                        try
                         {
-                            return CreateView(model);
+                            var model = JsonConvert.DeserializeObject<LyricThemeJsonModel>(json);
+
+                            if (model != null)
+                            {
+                                return CreateView(model);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            HotLyric.Win32.Utils.LogHelper.LogError(ex);
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        HotLyric.Win32.Utils.LogHelper.LogError(ex);
-                    }
+                }
+                catch (Exception e)
+                { 
                 }
 
                 return null;
@@ -87,7 +94,7 @@ namespace HotLyric.Win32.Models
                 {
                     try
                     {
-                        ApplicationData.Current.LocalSettings.Values.Remove("Theme_Current");
+                        Fix.LocalSettings.Remove("Theme_Current");
                     }
                     catch (Exception ex)
                     {
@@ -97,7 +104,7 @@ namespace HotLyric.Win32.Models
                 else
                 {
                     var jsonModel = CreateJsonModel(value);
-                    ApplicationData.Current.LocalSettings.Values["Theme_Current"] = JsonConvert.SerializeObject(jsonModel);
+                    Fix.LocalSettings["Theme_Current"] = JsonConvert.SerializeObject(jsonModel);
                 }
             }
         }

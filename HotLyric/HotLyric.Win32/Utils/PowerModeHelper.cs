@@ -123,19 +123,26 @@ namespace HotLyric.Win32.Utils
 
         public static void SetEfficiencyMode(bool enable)
         {
-            if (enable)
+            try
             {
-                if (IsSupportEfficiencyMode)
+
+                if (enable)
                 {
-                    EfficiencyModeUtilities.SetEfficiencyMode(true);
+                    if (IsSupportEfficiencyMode)
+                    {
+                        EfficiencyModeUtilities.SetEfficiencyMode(true);
+                    }
+                }
+                else
+                {
+                    EfficiencyModeUtilities.SetEfficiencyMode(false);
                 }
             }
-            else
+            catch
             {
-                EfficiencyModeUtilities.SetEfficiencyMode(false);
+                // ignored
             }
         }
-
 
     }
 }

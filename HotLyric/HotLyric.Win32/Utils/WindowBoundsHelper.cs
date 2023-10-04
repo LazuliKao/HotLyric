@@ -30,7 +30,7 @@ namespace HotLyric.Win32.Utils
             width = 0;
             height = 0;
 
-            if (ApplicationData.Current.LocalSettings.Values.TryGetValue($"WindowBounds2_{key}", out var _bounds)
+            if (Fix.LocalSettings.TryGetValue($"WindowBounds2_{key}", out var _bounds)
                 && _bounds is string bounds)
             {
                 var arr = bounds.Split('|')
@@ -52,7 +52,7 @@ namespace HotLyric.Win32.Utils
 
                 return true;
             }
-            else if (ApplicationData.Current.LocalSettings.Values.TryGetValue($"WindowBounds_{key}", out var oldBounds)
+            else if (Fix.LocalSettings.TryGetValue($"WindowBounds_{key}", out var oldBounds)
                 && oldBounds is string json)
             {
                 var jobj = JObject.Parse(json);
@@ -65,7 +65,7 @@ namespace HotLyric.Win32.Utils
 
                 FormattableString formatString = $"{x}|{y}|{width}|{height}";
 
-                ApplicationData.Current.LocalSettings.Values[$"WindowBounds2_{key}"] = formatString.ToString(CultureInfo.InvariantCulture);
+                Fix.LocalSettings[$"WindowBounds2_{key}"] = formatString.ToString(CultureInfo.InvariantCulture);
 
                 return true;
             }
@@ -77,7 +77,7 @@ namespace HotLyric.Win32.Utils
         {
             FormattableString formatString = $"{x}|{y}|{width}|{height}";
 
-            ApplicationData.Current.LocalSettings.Values[$"WindowBounds2_{key}"] = formatString.ToString(CultureInfo.InvariantCulture);
+            Fix.LocalSettings[$"WindowBounds2_{key}"] = formatString.ToString(CultureInfo.InvariantCulture);
 
             windowBounds = new Rect(x, y, width, height);
         }
