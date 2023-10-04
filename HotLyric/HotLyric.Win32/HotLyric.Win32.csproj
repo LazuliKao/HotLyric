@@ -48,6 +48,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="appicon.ico">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Assets\defaultTheme.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

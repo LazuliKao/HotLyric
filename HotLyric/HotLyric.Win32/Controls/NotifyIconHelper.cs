@@ -4,6 +4,7 @@ using HotLyric.Win32.Views;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,8 +39,10 @@ namespace HotLyric.Win32.Controls
 
         public NotifyIconHelper()
         {
-            notifyIcon = new TaskbarIcon();
-
+            notifyIcon = new TaskbarIcon()
+            {
+                Icon = new Icon("appicon.ico")
+            };
             var contextMenu = new MenuFlyout();
             var command = new AsyncRelayCommand<MenuFlyoutItemBase>(OnMenuItemClick);
             var toggleCommand = new AsyncRelayCommand<ToggleMenuFlyoutItem>(async item =>
