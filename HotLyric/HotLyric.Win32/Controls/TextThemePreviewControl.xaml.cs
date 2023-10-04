@@ -22,7 +22,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Windows.UI;
 using BlueFire.Toolkit.WinUI3.Text;
 
-//https://go.microsoft.com/fwlink/?LinkId=234236 ÉÏ½éÉÜÁË¡°ÓÃ»§¿Ø¼ş¡±ÏîÄ£°å
+//https://go.microsoft.com/fwlink/?LinkId=234236 ä¸Šä»‹ç»äº†â€œç”¨æˆ·æ§ä»¶â€é¡¹æ¨¡æ¿
 
 namespace HotLyric.Win32.Controls
 {
@@ -73,7 +73,7 @@ namespace HotLyric.Win32.Controls
                     line = new LyricDrawingLine(
                         args.DrawingSession,
                         sender.Size,
-                        new SampleLine("×Ö"),
+                        new SampleLine("å­—"),
                         canvasFontFamilies,
                         FontWeight,
                         FontStyle,
