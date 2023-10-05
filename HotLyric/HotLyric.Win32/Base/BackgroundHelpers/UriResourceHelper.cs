@@ -34,6 +34,12 @@ namespace HotLyric.Win32.Base.BackgroundHelpers
                 case "ms-appx":
                 case "ms-appdata":
                     {
+                        var fp = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory,
+                            uri.LocalPath.TrimStart('/')));
+                        if (File.Exists(fp))
+                        {
+                            return File.OpenRead(fp).AsRandomAccessStream();
+                        }
                         var file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(uri);
                         return await file.OpenReadAsync();
                     }
