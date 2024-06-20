@@ -13,6 +13,7 @@ using HotLyric.Win32.Utils.LyricFiles;
 using BlueFire.Toolkit.WinUI3.Text;
 using HotLyric.Win32.Models;
 using HotLyric.Win32.Utils;
+using Windows.UI.Text;
 
 namespace HotLyric.Win32.Controls.LyricControlDrawingData
 {
@@ -23,14 +24,14 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
 
         private readonly ICanvasResourceCreator resourceCreator;
 
-        private LyricDrawingTextGlyphRunGroup glyphRunGroup;
         private List<LyricDrawingText>? lyricTexts;
+        private FormattedText formattedText;
 
         public LyricDrawingLine(
             ICanvasResourceCreator resourceCreator,
             Size size,
             ILyricLine line,
-            IReadOnlyList<CanvasFontFamily> fontFamilies,
+            FontFamilySets fontFamilies,
             Windows.UI.Text.FontWeight fontWeight,
             Windows.UI.Text.FontStyle fontStyle,
             LyricDrawingLineType type,
@@ -46,7 +47,7 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
             FontFamilies = fontFamilies;
             Type = type;
             Alignment = alignment;
-            glyphRunGroup = LyricDrawingTextGlyphRunGroup.Create(resourceCreator, line.Text, fontFamilies, fontWeight, fontStyle);
+            formattedText = CreateFormattedText(line.Text, fontFamilies, fontWeight, fontStyle);
             CreateLyricText();
             FontWeight = fontWeight;
             FontStyle = fontStyle;
@@ -54,8 +55,8 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
 
         public Size TextSize => TextSizeType switch
         {
-            LyricDrawingLineTextSizeType.DrawSize => glyphRunGroup.TextDrawSize,
-            LyricDrawingLineTextSizeType.LayoutSize => glyphRunGroup.TextLayoutSize,
+            LyricDrawingLineTextSizeType.DrawSize => new Size(formattedText.Width, Math.Max(formattedText.Extent, 0)),
+            LyricDrawingLineTextSizeType.LayoutSize => new Size(formattedText.Width, formattedText.Height),
             LyricDrawingLineTextSizeType.FontHeight => GetTextSizeByFontHeight(),
             _ => throw new ArgumentException(nameof(TextSizeType))
         };
@@ -66,7 +67,7 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
 
         public ILyricLine LyricLine { get; }
 
-        public IReadOnlyList<CanvasFontFamily> FontFamilies { get; }
+        public FontFamilySets FontFamilies { get; }
 
         public Windows.UI.Text.FontWeight FontWeight { get; }
 
@@ -84,13 +85,13 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
         {
             lyricTexts = new List<LyricDrawingText>();
 
-            if (glyphRunGroup.GlyphRuns.Count > 0)
+            if (formattedText.LineGlyphRuns.Sum(c => c.GlyphRuns.Length) > 0)
             {
                 var geometryScale = TextSize.Height == 0 ? 0 : Size.Height / TextSize.Height;
 
                 if (Type == LyricDrawingLineType.Classic)
                 {
-                    lyricTexts.Add(new LyricDrawingTextClassic(resourceCreator, glyphRunGroup.GlyphRuns, StrokeWidth, geometryScale, TextSizeType));
+                    lyricTexts.Add(new LyricDrawingTextClassic(resourceCreator, formattedText, StrokeWidth, geometryScale, TextSizeType));
 
                 }
                 else
@@ -102,7 +103,7 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
 
         public void Draw(CanvasDrawingSession drawingSession, in LyricDrawingParameters parameters)
         {
-            if (glyphRunGroup.GlyphRuns.Count == 0) return;
+            if (formattedText.LineGlyphRuns.Count == 0) return;
 
             var scaleProgress = parameters.ScaleProgress;
             var playProgress = parameters.PlayProgress;
@@ -196,7 +197,7 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
 
             if (TextSizeType == LyricDrawingLineTextSizeType.FontHeight)
             {
-                var actualLineHeight = glyphRunGroup.TextLayoutSize.Height * geometryScale;
+                var actualLineHeight = formattedText.Height * geometryScale;
                 matrix *= Matrix3x2.CreateTranslation(0, (float)(textHeight - actualLineHeight) / 2);
             }
 
@@ -212,10 +213,10 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
 
         private Size GetTextSizeByFontHeight()
         {
-            var width = glyphRunGroup.TextLayoutSize.Width;
-            var height = glyphRunGroup.TextLayoutSize.Height;
+            var width = formattedText.Width;
+            var height = formattedText.Height;
 
-            var prop = SystemFontHelper.GetFontProperties(glyphRunGroup.PrimaryFontFamily, CultureInfoUtils.DefaultUICulture.Name);
+            var prop = SystemFontHelper.GetFontProperties(FontFamilies.PrimaryFontFamily, CultureInfoUtils.DefaultUICulture.Name);
 
             if (prop != null)
             {
@@ -225,10 +226,34 @@ namespace HotLyric.Win32.Controls.LyricControlDrawingData
             return new Size(width, height);
         }
 
+        private static FormattedText CreateFormattedText(string textString, FontFamilySets fontFamilies, FontWeight fontWeight, FontStyle fontStyle)
+        {
+            var fontFamily = fontFamilies.PrimaryFontFamily;
+
+            if (fontFamilies.IsCompositeFont)
+            {
+                fontFamily = FontFamilySets.LyricCompositeFontFamilyName;
+            }
+
+            return new FormattedText(
+                textString,
+                "en",
+                Microsoft.UI.Xaml.FlowDirection.LeftToRight,
+                new FormattedTextTypeface(
+                    fontFamily,
+                    fontWeight,
+                    fontStyle,
+                    FontStretch.Normal),
+                10,
+                false,
+                false,
+                null);
+        }
+
         protected override void DisposeCore(bool disposing)
         {
-            glyphRunGroup?.Dispose();
-            glyphRunGroup = null!;
+            formattedText?.Dispose();
+            formattedText = null!;
 
             var list = lyricTexts;
             lyricTexts = null;
