@@ -39,7 +39,7 @@
 		<PackageReference Include="Vanara.PInvoke.Security" Version="3.4.16" />
 		<PackageReference Include="Vanara.PInvoke.SHCore" Version="3.4.16" />
 		<PackageReference Include="Vanara.PInvoke.User32" Version="3.4.16" />
-		<PackageReference Include="Win2D.WinUI3.EnableCanvasAnimatedControl" Version="$(Win2D_WinUI3_EnableCanvasAnimatedControl_Version)" />
+		<PackageReference Include="Win2D.WinUI3.EnableCanvasAnimatedControl" Version="1.1.0-preview1" />
 		<Manifest Include="$(ApplicationManifest)" />
 	</ItemGroup>
 
